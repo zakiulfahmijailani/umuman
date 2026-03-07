@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import DevNavBar from "@/components/dev/DevNavBar";
+import DevNavLoader from "@/components/dev/DevNavLoader";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -36,7 +36,7 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${cormorant.variable} ${jetbrainsMono.variable} antialiased font-body text-neutral-700 bg-surface-page`}
       >
         {children}
-        {process.env.NODE_ENV === 'development' && <DevNavBar />}
+        <DevNavLoader />
       </body>
     </html>
   );
