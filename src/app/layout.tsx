@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import DevNavBar from "@/components/dev/DevNavBar";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -20,8 +21,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NikahKu - Platform Undangan Pernikahan Digital",
-  description: "Platform undangan pernikahan digital paling mudah digunakan dan paling cantik di Indonesia, berbasis AI.",
+  title: "umuman - Platform Undangan Digital",
+  description: "Platform undangan digital paling mudah digunakan dan paling cantik di Indonesia.",
 };
 
 export default function RootLayout({
@@ -35,6 +36,7 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${cormorant.variable} ${jetbrainsMono.variable} antialiased font-body text-neutral-700 bg-surface-page`}
       >
         {children}
+        {process.env.NODE_ENV === 'development' && <DevNavBar />}
       </body>
     </html>
   );
