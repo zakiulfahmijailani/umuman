@@ -110,7 +110,7 @@ export default function LandingPage() {
                             </Button>
                         </Link>
                         <Link href="/invite/demo">
-                            <Button size="lg" variant="outline" className="text-base px-8 py-6 rounded-xl bg-white text-stone-700 border-stone-200 hover:bg-stone-50 hover:text-gold-600 shadow-sm cursor-pointer transition-all">
+                            <Button size="lg" variant="secondary" className="text-base px-8 py-6 rounded-xl bg-white text-stone-700 border-stone-200 hover:bg-stone-50 hover:text-gold-600 shadow-sm cursor-pointer transition-all">
                                 Lihat Contoh Undangan
                             </Button>
                         </Link>
@@ -185,10 +185,10 @@ export default function LandingPage() {
                                     <div className="p-8 pt-6 mt-auto">
                                         <Link href="/register" className="w-full block">
                                             <Button className={`w-full py-6 rounded-xl text-base font-semibold cursor-pointer shadow-md transition-all ${p.popular
-                                                    ? "bg-gradient-to-r from-gold-500 to-amber-600 text-white border-0 hover:shadow-lg hover:shadow-gold-500/30 hover:-translate-y-0.5"
-                                                    : "bg-white text-stone-700 border border-stone-200 hover:bg-stone-50 hover:border-stone-300"
+                                                ? "bg-gradient-to-r from-gold-500 to-amber-600 text-white border-0 hover:shadow-lg hover:shadow-gold-500/30 hover:-translate-y-0.5"
+                                                : "bg-white text-stone-700 border border-stone-200 hover:bg-stone-50 hover:border-stone-300"
                                                 }`}
-                                                variant={p.popular ? "default" : "outline"}>
+                                                variant={p.popular ? "primary" : "secondary"}>
                                                 {p.cta}
                                             </Button>
                                         </Link>

@@ -79,12 +79,19 @@ export async function GET(request: Request) {
 }
 
 // POST /api/invitations
+import { z } from 'zod'
+
+const createInvitationSchema = z.object({
+    groom_name: z.string().min(1).max(100),
+    bride_name: z.string().min(1).max(100),
+})
+
 export async function POST(request: Request) {
     const supabase = await createClient()
 
     if (!supabase) {
         return NextResponse.json(
-            { data: null, error: { code: 'DATABASE_ERROR', message: 'Database is unconfigured.' } },
+            { data: null, error: { code: 'DATABASE_ERROR', message: 'Database client not initialized.' } },
             { status: 500 }
         )
     }
@@ -93,71 +100,77 @@ export async function POST(request: Request) {
 
     if (!user) {
         return NextResponse.json(
-            { data: null, error: { code: 'UNAUTHORIZED', message: 'Sesi anda telah habis.' } },
+            { data: null, error: { code: 'UNAUTHORIZED', message: 'Sesi Anda telah habis. Silakan login kembali.' } },
             { status: 401 }
         )
     }
 
     try {
         const body = await request.json()
+        const parsed = createInvitationSchema.safeParse(body)
 
-        // Very basic validation - would use Zod ideally
-        if (!body.theme_id || !body.groom?.full_name || !body.bride?.full_name) {
+        if (!parsed.success) {
             return NextResponse.json(
-                { data: null, error: { code: 'VALIDATION_ERROR', message: 'Data belum lengkap.' } },
+                { data: null, error: { code: 'VALIDATION_ERROR', message: 'Data tidak valid.', details: parsed.error.flatten().fieldErrors } },
                 { status: 400 }
             )
         }
 
-        // Generate base slug
-        const baseSlug = body.slug || `${body.groom.nickname}-${body.bride.nickname}`.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-        const uniqueSlug = `${baseSlug}-${uuidv4().substring(0, 6)}`
+        const { groom_name, bride_name } = parsed.data
+
+        // Generate slug
+        const cleanStr = (str: string) => str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+        const baseSlug = `${cleanStr(groom_name)}-dan-${cleanStr(bride_name)}`
+
+        let finalSlug = `${baseSlug}-${uuidv4().substring(0, 4)}`
+
+        // Check uniqueness and retry once if needed (Supabase constraint will handle final check)
+        const { count } = await supabase.from('invitations').select('*', { count: 'exact', head: true }).eq('slug', finalSlug)
+        if (count && count > 0) {
+            finalSlug = `${baseSlug}-${uuidv4().substring(0, 6)}`
+        }
 
         // 1. Insert into invitations
         const { data: invitation, error: invError } = await supabase
             .from('invitations')
             .insert({
                 user_id: user.id,
-                slug: body.slug || uniqueSlug,
-                theme_id: body.theme_id,
-                status: body.status || 'draft'
+                slug: finalSlug,
+                status: 'unpaid'
             })
             .select()
             .single()
 
-        if (invError) throw invError
+        if (invError) {
+            if (invError.code === '23505') {
+                return NextResponse.json(
+                    { data: null, error: { code: 'SLUG_ALREADY_TAKEN', message: 'Kombinasi url/nama sedang digunakan, silakan coba lagi.' } },
+                    { status: 409 }
+                )
+            }
+            throw invError
+        }
 
-        // 2. Insert into invitation content
-        const { error: contentError } = await supabase
-            .from('invitation_content')
+        // 2. Insert into invitation_details
+        const { error: detailsError } = await supabase
+            .from('invitation_details')
             .insert({
                 invitation_id: invitation.id,
-                groom_name: body.groom.full_name,
-                groom_nickname: body.groom.nickname,
-                bride_name: body.bride.full_name,
-                bride_nickname: body.bride.nickname,
-                event_type: body.events?.[0]?.type || 'akad_resepsi',
-                event_date: body.events?.[0]?.date,
-                event_time: body.events?.[0]?.start_time,
-                venue_name: body.events?.[0]?.venue_name,
-                venue_address: body.events?.[0]?.venue_address,
-                greeting_text: body.opening_text,
-                qris_image_url: body.digital_gift?.qris_image_url
+                groom_name: groom_name,
+                bride_name: bride_name
             })
 
-        if (contentError) {
-            // Rollback by deleting if content fails (assuming cascading deletes isn't immediate via client)
+        if (detailsError) {
+            // Rollback (best effort cleanup)
             await supabase.from('invitations').delete().eq('id', invitation.id)
-            throw contentError
+            throw detailsError
         }
 
         return NextResponse.json(
             {
                 data: {
-                    invitation_id: invitation.id,
-                    slug: invitation.slug,
-                    status: invitation.status,
-                    created_at: invitation.created_at
+                    id: invitation.id,
+                    slug: invitation.slug
                 },
                 error: null
             },
@@ -165,16 +178,9 @@ export async function POST(request: Request) {
         )
 
     } catch (error: any) {
-        // Checking for slug conflict (unique constraint violation)
-        if (error.code === '23505') {
-            return NextResponse.json(
-                { data: null, error: { code: 'SLUG_ALREADY_TAKEN', message: 'URL undangan sudah dipakai oleh orang lain.' } },
-                { status: 409 }
-            )
-        }
-
+        console.error("[POST /api/invitations] Error:", error)
         return NextResponse.json(
-            { data: null, error: { code: 'INTERNAL_ERROR', message: 'Terjadi kesalahan sistem.', details: error } },
+            { data: null, error: { code: 'INTERNAL_ERROR', message: 'Terjadi kesalahan saat memproses permintaan.', details: error.message } },
             { status: 500 }
         )
     }
