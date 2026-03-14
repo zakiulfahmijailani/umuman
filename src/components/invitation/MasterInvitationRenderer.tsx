@@ -4,6 +4,8 @@ import { useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Theme } from '@/types/theme';
 import { demoData } from "@/data/demoInvitation";
+import { InvitationData } from "@/types/invitation";
+import { InvitationErrorBoundary } from './InvitationErrorBoundary';
 import { InvitationThemeProvider, useInvitationTheme } from '@/components/invitation/themed/ThemeContext';
 import ThemedCoverSection from '@/components/invitation/themed/ThemedCoverSection';
 import ThemedHeroSection from '@/components/invitation/themed/ThemedHeroSection';
@@ -20,10 +22,10 @@ import MusicButton from '@/components/invitation/MusicButton';
 
 interface MasterInvitationRendererProps {
   theme: Theme;
-  invitationData?: typeof demoData;
+  invitationData: InvitationData;
 }
 
-function InvitationContent({ invitationData }: { invitationData: typeof demoData }) {
+function InvitationContent({ invitationData }: { invitationData: InvitationData }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -59,28 +61,54 @@ function InvitationContent({ invitationData }: { invitationData: typeof demoData
       <AnimatePresence>
         {isOpened && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
-            <ThemedHeroSection
-              coupleShortName={invitationData.coupleShortName}
-              groomName={invitationData.groom.fullName}
-              brideName={invitationData.bride.fullName}
-              weddingDate={invitationData.akad.date}
-              calendarUrl={invitationData.calendarUrl}
-            />
-            <ThemedCoupleSection groom={invitationData.groom} bride={invitationData.bride} />
-            <ThemedQuoteSection text={invitationData.quote.text} source={invitationData.quote.source} />
-            <ThemedLoveStorySection stories={invitationData.loveStory} />
-            <ThemedCountdownSection targetDate={invitationData.akad.date} />
-            <ThemedEventSection
-              akad={invitationData.akad}
-              reception={invitationData.reception}
-              dressCode={invitationData.dressCode}
-            />
-            <ThemedGallerySection photos={invitationData.gallery} />
-            <ThemedLoveGiftSection
-              bankAccounts={invitationData.bankAccounts}
-              giftAddress={invitationData.giftAddress}
-            />
-            <ThemedRsvpSection initialMessages={invitationData.rsvpMessages} />
+            <InvitationErrorBoundary sectionName="HeroSection">
+              <ThemedHeroSection
+                coupleShortName={invitationData.coupleShortName}
+                groomName={invitationData.groom.fullName}
+                brideName={invitationData.bride.fullName}
+                weddingDate={invitationData.akad.date}
+                calendarUrl={invitationData.calendarUrl}
+              />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="CoupleSection">
+              <ThemedCoupleSection groom={invitationData.groom} bride={invitationData.bride} />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="QuoteSection">
+              <ThemedQuoteSection text={invitationData.quote?.text || ""} source={invitationData.quote?.source || ""} />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="LoveStorySection">
+              <ThemedLoveStorySection stories={invitationData.loveStory || []} />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="CountdownSection">
+              <ThemedCountdownSection targetDate={invitationData.akad.date} />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="EventSection">
+              <ThemedEventSection
+                akad={invitationData.akad}
+                reception={invitationData.reception}
+                dressCode={invitationData.dressCode || { description: '', colors: [] }}
+              />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="GallerySection">
+              <ThemedGallerySection photos={invitationData.gallery || []} />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="LoveGiftSection">
+              <ThemedLoveGiftSection
+                bankAccounts={invitationData.bankAccounts || []}
+                giftAddress={invitationData.giftAddress || ''}
+              />
+            </InvitationErrorBoundary>
+            
+            <InvitationErrorBoundary sectionName="RsvpSection">
+              <ThemedRsvpSection initialMessages={invitationData.rsvpMessages || []} />
+            </InvitationErrorBoundary>
             <div className="h-20" />
             <ThemedBottomNavbar />
             <MusicButton isPlaying={isMusicPlaying} onToggle={toggleMusic} />
@@ -92,7 +120,7 @@ function InvitationContent({ invitationData }: { invitationData: typeof demoData
 }
 
 export default function MasterInvitationRenderer({ theme, invitationData }: MasterInvitationRendererProps) {
-  const data = invitationData || demoData;
+  const data = invitationData;
   return (
     <InvitationThemeProvider theme={theme}>
       <InvitationContent invitationData={data} />

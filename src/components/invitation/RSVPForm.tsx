@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react"
+import { rsvpSchema } from "@/lib/validators"
 
 export function RSVPForm({ invitationId }: { invitationId: string }) {
     const [status, setStatus] = useState<"idle" | "loading" | "success">("idle")
@@ -20,8 +21,16 @@ export function RSVPForm({ invitationId }: { invitationId: string }) {
         const kehadiran = formData.get("kehadiran")
         const jumlah = formData.get("jumlah")
 
-        if (!nama || !kehadiran || !jumlah) {
-            setError("Tolong lengkapi semua bidang yang wajib diisi.")
+        const rawData = {
+            name: nama,
+            attendance_status: kehadiran,
+            number_of_guests: Number(jumlah),
+            message: formData.get("pesan") as string | undefined,
+        }
+
+        const parsed = rsvpSchema.safeParse(rawData)
+        if (!parsed.success) {
+            setError(parsed.error.issues[0].message)
             return
         }
 

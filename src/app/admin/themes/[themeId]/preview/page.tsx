@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { dummyThemes } from '@/data/dummyThemes';
 import MasterInvitationRenderer from '@/components/invitation/MasterInvitationRenderer';
+import { demoData } from '@/data/demoInvitation';
 
 export default function AdminThemePreviewPage() {
     const params = useParams();
@@ -36,7 +37,7 @@ export default function AdminThemePreviewPage() {
                 PREVIEW: {theme.name}
             </div>
             {/* Render */}
-            <MasterInvitationRenderer theme={theme} />
+            <MasterInvitationRenderer theme={theme} invitationData={demoData as any} />
         </div>
     );
 }

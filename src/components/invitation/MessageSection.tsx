@@ -1,3 +1,5 @@
+// @deprecated — digantikan oleh themed/ equivalent. Aman dihapus setelah
+// konfirmasi tidak ada penggunaan lain. [cleanup-2026-03-14]
 import { MessageSquare } from "lucide-react"
 
 export default function MessageSection() {
