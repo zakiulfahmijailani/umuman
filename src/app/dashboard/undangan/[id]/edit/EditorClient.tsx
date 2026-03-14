@@ -148,6 +148,11 @@ export default function EditorClient({ initialData }: EditorClientProps) {
                                 >
                                     <Icon className={`w-4 h-4 ${isActive ? "text-gold-500" : "text-stone-400"}`} />
                                     {tab.label}
+                                    {["amplop", "ayat", "musik", "pengaturan"].includes(tab.id) && (
+                                        <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-200 text-stone-500 group-hover:bg-stone-300">
+                                            🔒 Soon
+                                        </span>
+                                    )}
                                 </button>
                             );
                         })}
@@ -202,7 +207,7 @@ export default function EditorClient({ initialData }: EditorClientProps) {
                                 <div className="space-y-2">
                                     <label className="text-label-sm sm:text-label-lg font-medium text-[var(--color-neutral-700)] mb-1 block">Foto Couple (URL)</label>
                                     <Input placeholder="https://..." value={formData.couple_photo_url} onChange={e => handleChange("couple_photo_url", e.target.value)} />
-                                    <p className="text-xs text-stone-500">Tips: Gunakan rasio 1:1 atau 3:4. Fitur direct upload menyusul.</p>
+                                    <p className="text-xs text-stone-500 mt-2">Upload langsung akan tersedia setelah integrasi cloud storage aktif. Untuk sekarang, masukkan URL foto yang sudah dihosting (Google Photos, Imgur, dll.)</p>
                                 </div>
                             </div>
                         </div>

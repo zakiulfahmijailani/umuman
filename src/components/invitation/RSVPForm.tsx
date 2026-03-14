@@ -4,13 +4,27 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
-import { CheckCircle2, Loader2 } from "lucide-react"
+import { CheckCircle2, Loader2, AlertCircle } from "lucide-react"
 
 export function RSVPForm({ invitationId }: { invitationId: string }) {
     const [status, setStatus] = useState<"idle" | "loading" | "success">("idle")
+    const [error, setError] = useState<string>("")
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setError("")
+        
+        const form = e.currentTarget
+        const formData = new FormData(form)
+        const nama = formData.get("nama")
+        const kehadiran = formData.get("kehadiran")
+        const jumlah = formData.get("jumlah")
+
+        if (!nama || !kehadiran || !jumlah) {
+            setError("Tolong lengkapi semua bidang yang wajib diisi.")
+            return
+        }
+
         setStatus("loading")
         // Mock API Submission
         await new Promise(r => setTimeout(r, 1000))
@@ -29,13 +43,19 @@ export function RSVPForm({ invitationId }: { invitationId: string }) {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Input label="Nama Lengkap" placeholder="Masukkan nama Anda" required disabled={status === "loading"} />
-            <Select label="Kehadiran" required disabled={status === "loading"}>
+            {error && (
+                <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{error}</span>
+                </div>
+            )}
+            <Input name="nama" label="Nama Lengkap" placeholder="Masukkan nama Anda" required disabled={status === "loading"} />
+            <Select name="kehadiran" label="Kehadiran" required disabled={status === "loading"}>
                 <option value="">Konfirmasi Kehadiran</option>
                 <option value="hadir">Ya, Saya Akan Hadir</option>
                 <option value="tidak_hadir">Maaf, Saya Tidak Bisa Hadir</option>
             </Select>
-            <Select label="Jumlah Orang" required disabled={status === "loading"}>
+            <Select name="jumlah" label="Jumlah Orang" required disabled={status === "loading"}>
                 <option value="1">1 Orang</option>
                 <option value="2">2 Orang</option>
                 <option value="3">3 Orang</option>
@@ -44,6 +64,7 @@ export function RSVPForm({ invitationId }: { invitationId: string }) {
             <div className="flex flex-col gap-1 w-full">
                 <label className="text-label-sm sm:text-label-lg mb-1 text-[var(--color-neutral-700)]">Pesan Tambahan (Opsional)</label>
                 <textarea
+                    name="pesan"
                     disabled={status === "loading"}
                     className="w-full rounded-md border text-body-md bg-[var(--color-surface-card)] px-3 py-2 border-[var(--color-neutral-300)] min-h-[80px] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary-500)] focus:border-[var(--color-primary-500)] disabled:bg-[var(--color-neutral-100)] disabled:cursor-not-allowed"
                     placeholder="Informasi tambahan untuk kami"

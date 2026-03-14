@@ -98,7 +98,7 @@ export default function SelectThemePage() {
                                         <Eye className="w-4 h-4" /> Live Preview
                                     </Button>
                                 </Link>
-                                <Link href={`/dashboard/undangan/baru/wizard?tema=${theme.id}`} className="w-full">
+                                <Link href={`/dashboard/undangan/baru/form?tema=${theme.id}`} className="w-full">
                                     <Button className="w-full bg-[#14213D] hover:bg-[#1a2b50] text-white gap-2 transition-all group-hover:bg-[#FCA311] group-hover:text-[#14213D]">
                                         Pilih Tema Ini <ChevronRight className="w-4 h-4 ml-auto" />
                                     </Button>

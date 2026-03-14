@@ -148,7 +148,7 @@ export default function LandingPage() {
             {/* Pricing */}
             <section id="harga" className="bg-stone-50 border-y border-stone-100 py-20 md:py-32 relative overflow-hidden">
                 <div className="absolute top-0 right-1/4 h-[500px] w-[500px] bg-rose-50/50 rounded-full blur-3xl pointer-events-none" />
-                <div className="container relative mx-auto px-4 z-10">
+                <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 z-10">
                     <div className="text-center max-w-2xl mx-auto">
                         <h2 className="font-serif text-3xl font-bold text-stone-800 md:text-4xl">Pilih Paket yang Tepat</h2>
                         <p className="mt-4 text-stone-600 text-lg">Harga terjangkau untuk momen sekali seumur hidupmu</p>
@@ -183,7 +183,7 @@ export default function LandingPage() {
                                         </ul>
                                     </CardContent>
                                     <div className="p-8 pt-6 mt-auto">
-                                        <Link href="/register" className="w-full block">
+                                        <Link href={`/register?plan=${p.name.toLowerCase()}`} className="w-full block">
                                             <Button className={`w-full py-6 rounded-xl text-base font-semibold cursor-pointer shadow-md transition-all ${p.popular
                                                 ? "bg-gradient-to-r from-gold-500 to-amber-600 text-white border-0 hover:shadow-lg hover:shadow-gold-500/30 hover:-translate-y-0.5"
                                                 : "bg-white text-stone-700 border border-stone-200 hover:bg-stone-50 hover:border-stone-300"

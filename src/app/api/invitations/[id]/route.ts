@@ -38,6 +38,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+        await new Promise(r => setTimeout(r, 800)); // Simulate mock delay
+        return NextResponse.json({ data: { success: true }, error: null });
+    }
+
     const supabase = await createClient();
     const resolvedParams = await params;
 

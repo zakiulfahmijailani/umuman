@@ -74,7 +74,7 @@ export default function AdminUsersPage() {
                                         </td>
                                         <td className="py-4 px-6 text-center font-medium text-[#14213D]">{user.totalInvites}</td>
                                         <td className="py-4 px-6 text-gray-400">{user.joined}</td>
-                                        <td className="py-4 px-6">
+                                        <td className="py-4 px-6 whitespace-nowrap">
                                             <span className={`inline-flex items-center gap-1.5 font-medium ${user.status === 'Aktif' ? 'text-green-600' : 'text-red-600'}`}>
                                                 {user.status === 'Aktif' ? <ShieldCheck className="w-4 h-4" /> : <Ban className="w-4 h-4" />}
                                                 {user.status}

@@ -19,11 +19,18 @@ export default async function EditInvitationPage({ params }: { params: Promise<{
             invitation_details: {
                 groom_name: "Budi",
                 bride_name: "Ayu",
-                akad_date: "2026-06-15T08:00:00",
-                reception_date: "2026-06-15T11:00:00",
+                groom_full_name: "Budi Santoso",
                 groom_father: "Bpk. Santoso",
+                groom_mother: "Ibu Siti",
+                bride_full_name: "Ayu Lestari",
                 bride_father: "Bpk. Hendro",
-                // add other minimal realistic stubs if needed for the Editor form
+                bride_mother: "Ibu Ratna",
+                akad_date: "2026-06-15T08:00",
+                akad_venue: "Masjid Raya Al-Akbar",
+                akad_address: "Jl. Masjid Agung Timur No.1, Surabaya",
+                reception_date: "2026-06-15T11:00",
+                reception_venue: "Gedung Serbaguna",
+                reception_address: "Jl. Merdeka No 2, Surabaya",
             }
         }
     } else {

@@ -93,7 +93,7 @@ export default function MyInvitationsPage() {
 
                                 {/* Tombol Aksi */}
                                 <div className="flex flex-wrap items-center gap-2 mt-5">
-                                    <Link href={`/u/${inv.slug}`} className="flex-1">
+                                    <Link href={`/u/${inv.slug}`} target="_blank" className="flex-1">
                                         <Button variant="secondary" className="w-full text-xs gap-1.5 bg-primary/5 text-primary border border-primary/20 hover:bg-primary/10">
                                             <Eye className="w-3.5 h-3.5" /> Lihat Undangan
                                         </Button>

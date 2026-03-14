@@ -31,7 +31,7 @@ export default function MinimalistWhite({ content, invitationId }: { content: an
             style={themeVars}
         >
             {/* Hero Section */}
-            <section className="h-screen relative flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-1000">
+            <section className="h-screen relative flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-1000 delay-1000 fill-mode-both">
                 <div className="absolute inset-0 z-0 bg-gradient-to-b from-[var(--theme-bg-alt)] to-[var(--theme-bg)]" />
                 <div className="z-10 flex flex-col items-center justify-center gap-6">
                     <p className="text-overline tracking-widest text-[var(--theme-text-muted)]">THE WEDDING OF</p>

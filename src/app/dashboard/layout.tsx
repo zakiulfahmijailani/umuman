@@ -18,6 +18,8 @@ export default function DashboardLayout({
         if (pathname?.includes('/undangan')) return 'Undangan Saya'
         if (pathname?.includes('/tema')) return 'Pilih Tema'
         if (pathname?.includes('/akun')) return 'Akun & Langganan'
+        if (pathname?.includes('/transaksi')) return 'Riwayat Transaksi'
+        if (pathname?.includes('/cs')) return 'Customer Service'
         return 'Beranda Dashboard'
     }
 

@@ -114,8 +114,8 @@ export default function OwnerDashboardPage() {
                         <CardTitle className="font-serif">Tren Pendapatan (6 Bulan Terakhir)</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-[300px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
+                        <div className="w-full">
+                            <ResponsiveContainer width="100%" height={300}>
                                 <LineChart
                                     data={revenueData}
                                     margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
@@ -159,8 +159,8 @@ export default function OwnerDashboardPage() {
                         <CardTitle className="font-serif">Distribusi Paket (%)</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-[300px] w-full mt-2">
-                            <ResponsiveContainer width="100%" height="100%">
+                        <div className="w-full mt-2">
+                            <ResponsiveContainer width="100%" height={300}>
                                 <BarChart
                                     data={packageDistributionData}
                                     margin={{ top: 20, right: 0, left: -25, bottom: 0 }}

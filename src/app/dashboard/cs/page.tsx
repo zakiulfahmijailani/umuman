@@ -24,18 +24,18 @@ export default function CustomerServicePage() {
                         <FaWhatsapp className="w-6 h-6" />
                         <span className="text-lg font-semibold text-[#14213D]">WhatsApp</span>
                     </div>
-                    <p className="text-[#9E1045] font-medium">+62 8211 9955 112</p>
+                    <p className="text-[#9E1045] font-medium">+62 821 1995 5112</p>
                 </a>
 
                 <a
-                    href="mailto:admin@wevitation.com"
+                    href="mailto:admin@umuman.com"
                     className="bg-white rounded-[2rem] p-8 flex flex-col items-center justify-center gap-3 shadow-[0px_4px_24px_rgba(0,0,0,0.02)] border border-neutral-100 hover:shadow-md transition-all group"
                 >
                     <div className="flex items-center gap-3 text-[#20b486] group-hover:scale-105 transition-transform">
                         <Mail className="w-6 h-6" strokeWidth={2.5} />
                         <span className="text-lg font-semibold text-[#14213D]">Email</span>
                     </div>
-                    <p className="text-[#9E1045] font-medium">admin@wevitation.com</p>
+                    <p className="text-[#9E1045] font-medium">admin@umuman.com</p>
                 </a>
             </div>
 
@@ -53,7 +53,7 @@ export default function CustomerServicePage() {
 
             {/* Footer */}
             <div className="flex flex-col md:flex-row items-center justify-between text-xs text-neutral-400 mt-12 pt-8 border-t border-neutral-200">
-                <p>Made with ❤️ for your Moment | Powered by Wevitation</p>
+                <p>Made with ❤️ for your Moment | Powered by umuman</p>
                 <p className="mt-2 md:mt-0">Version: 1.2</p>
             </div>
         </div>
